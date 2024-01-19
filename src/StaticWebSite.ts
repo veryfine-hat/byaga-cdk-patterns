@@ -20,38 +20,40 @@ import {ARecord, RecordTarget} from "aws-cdk-lib/aws-route53";
 import {CloudFrontTarget} from "aws-cdk-lib/aws-route53-targets";
 import duration from './methods/duration';
 import {buildNodeSource} from './methods/build-node-source'
-import {IIgnoreOptions, no} from "./methods/walk-directory";
 import {Duration} from "aws-cdk-lib";
-import {RestApi} from "./RestApi";
 
-interface StaticWebSiteConfig {
+/**
+ * Configuration interface for the StaticWebSite class.
+ */
+export interface StaticWebSiteConfig {
     srcDir?: string,
     domain: IDomainConfig,
     env: NodeJS.ProcessEnv,
-    ignore?: IIgnoreOptions,
     proxy?: SourceConfiguration[]
 }
 
+/**
+ * Logic which will setup a static web site in AWS with an S3 Bucket, CloudFront Distribution, and Route53 A-Name Record.
+ */
 export class StaticWebSite {
+    /**
+     * Constructs a new StaticWebSite instance.
+     * @param {DeployStack} stack - The deployment stack.
+     * @param {string} id - The ID of the website.
+     * @param {StaticWebSiteConfig} props - The configuration properties of the website.
+     */
     constructor(stack: DeployStack, id: string, props: StaticWebSiteConfig) {
         console.log('Deploying Static Web Site', id)
 
         const done = duration()
-        const childrenExcluded = props.ignore?.childrenExcluded || no;
-        const {buildDir, moduleChanged} = buildNodeSource('web', id, {
-            ignore: {
-                ...props.ignore,
-                childrenExcluded: stat => stat.name === 'out' || childrenExcluded(stat)
-            }
+        const buildDir = buildNodeSource('web', id)
+
+        console.log('Building UI Source', id)
+        execSync('npm run export', {
+                cwd: buildDir,
+                env: props.env
         })
 
-        if (moduleChanged) {
-            console.log('Building UI Source', id)
-            execSync('npm run export', {
-                    cwd: buildDir,
-                    env: props.env
-            })
-        }
         console.log('Total Build Duration (ms)', done())
         const exportDir: string = buildDir + '/out';
 
@@ -63,7 +65,14 @@ export class StaticWebSite {
             websiteIndexDocument: "index.html",
             websiteErrorDocument: "error.html",
             removalPolicy: RemovalPolicy.DESTROY,
-            autoDeleteObjects: true
+            autoDeleteObjects: true,
+            publicReadAccess: false,
+            blockPublicAccess: {
+                blockPublicAcls: true,
+                blockPublicPolicy: true,
+                ignorePublicAcls: true,
+                restrictPublicBuckets: true
+            }
         });
         new Output(stack, `${id}-content-bucket`, s3BucketSource.bucketName);
 
@@ -108,6 +117,13 @@ export class StaticWebSite {
          })
     }
 
+    /**
+     * Defines a proxy for the static website.
+     * @param {DeployStack} stack - The deployment stack.
+     * @param {string} domainName - The domain name.
+     * @param {string} pathPattern - The path pattern.
+     * @returns {SourceConfiguration} The source configuration for the proxy.
+     */
     static defineProxy(stack: DeployStack, domainName: string, pathPattern: string): SourceConfiguration {
         return {
             customOriginSource: {
