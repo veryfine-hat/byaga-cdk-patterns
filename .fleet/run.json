@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "type": "npm",
+            "name": "cdk-patterns build",
+            "command": "run",
+            "scripts": "build",
+        },
+
+    ]
+}
