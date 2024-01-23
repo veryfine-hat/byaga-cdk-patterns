@@ -1,10 +1,12 @@
 import {createStack, StackArguments} from './create-stack';
 import {Construct} from "constructs";
 import {Stack} from "aws-cdk-lib";
+import {loadConfiguration} from "./load-configuration";
 
 jest.mock('aws-cdk-lib', () => ({
     Stack: jest.fn().mockImplementation(() => ({})),
 }));
+jest.mock('./load-configuration')
 
 let stack: Stack;
 let scope: Construct;
@@ -24,6 +26,7 @@ beforeEach(() => {
         project: 'project',
         owner: 'owner',
         region: 'region',
+        config: {}
     };
     (Stack as unknown as jest.Mock).mockReturnValue(stack)
 });
@@ -65,4 +68,10 @@ it('will add standard tags to the stack', () => {
     expect(stack.tags.setTag).toHaveBeenCalledWith('stack', 'stack-name-stage');
     expect(stack.tags.setTag).toHaveBeenCalledWith('project', props.project);
     expect(stack.tags.setTag).toHaveBeenCalledWith('owner', props.owner);
+})
+
+it('will load the configuration for the stage', () => {
+    createStack(scope, props);
+
+    expect(loadConfiguration).toHaveBeenCalledWith(props.stage);
 })

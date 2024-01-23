@@ -2,6 +2,7 @@ import {IConstruct} from "constructs";
 import {Stack} from "aws-cdk-lib";
 import {genId, genName} from "./generate-identifier";
 import {StackProps} from "aws-cdk-lib/core";
+import {loadConfiguration, StackConfiguration} from "./load-configuration";
 
 /**
  * Interface for the arguments when creating a stack.
@@ -11,7 +12,8 @@ export interface StackArguments extends StackProps {
     stage?: string
     project: string
     owner: string
-    region: string
+    region: string,
+    config: StackConfiguration
 }
 
 /**
@@ -21,7 +23,8 @@ export interface DeployStack {
     stack: Stack,
     name: string,
     stage: string,
-    project: string
+    project: string,
+    config: StackConfiguration
 }
 
 /**
@@ -46,6 +49,7 @@ export function createStack(scope: IConstruct, props: StackArguments): DeploySta
         name: props.stackName,
         stage,
         project: props.project,
+        config: loadConfiguration(stage)
     })
 }
 
