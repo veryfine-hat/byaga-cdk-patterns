@@ -17,7 +17,7 @@ export interface FunctionIntegrationProps {
 
 export interface FunctionIntegration {
     id: string,
-    function: Lambda
+    lambda: Lambda
 }
 
 /**
@@ -36,16 +36,16 @@ export function createFunction(id: string, options: FunctionIntegrationProps) {
     const {stack} = getCurrentStack()
     const details: FunctionIntegration = {
         id,
-        function: new Lambda(stack, genStackResourceId(id, 'lambda'), props)
+        lambda: new Lambda(stack, genStackResourceId(id, 'lambda'), props)
     }
 
     new CfnOutput(stack, genStackResourceId(id, 'function-name'), {
-        value: details.function.functionName,
+        value: details.lambda.functionName,
         exportName: genStackResourceName(id, 'function-name')
     });
 
     new LogRetention(stack, genStackResourceId(id, 'log-retention'), {
-        logGroupName: details.function.logGroup.logGroupName,
+        logGroupName: details.lambda.logGroup.logGroupName,
         retention: RetentionDays.ONE_WEEK,
         removalPolicy: RemovalPolicy.DESTROY,
     });

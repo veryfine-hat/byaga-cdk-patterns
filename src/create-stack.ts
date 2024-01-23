@@ -12,8 +12,7 @@ export interface StackArguments extends StackProps {
     stage?: string
     project: string
     owner: string
-    region: string,
-    config: StackConfiguration
+    region: string
 }
 
 /**
