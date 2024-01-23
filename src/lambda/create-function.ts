@@ -34,9 +34,13 @@ export function createFunction(id: string, options: FunctionIntegrationProps) {
     })
 
     const {stack} = getCurrentStack()
+    const logGroupName = props.logGroupName ?? `/aws/lambda/${props.functionName}`;
     const details: FunctionIntegration = {
         id,
-        lambda: new Lambda(stack, genStackResourceId(id, 'lambda'), props)
+        lambda: new Lambda(stack, genStackResourceId(id, 'lambda'), {
+            ...props,
+            logGroupName
+        })
     }
 
     new CfnOutput(stack, genStackResourceId(id, 'function-name'), {
@@ -45,9 +49,8 @@ export function createFunction(id: string, options: FunctionIntegrationProps) {
     });
 
     new LogRetention(stack, genStackResourceId(id, 'log-retention'), {
-        logGroupName: details.lambda.logGroup.logGroupName,
-        retention: RetentionDays.ONE_WEEK,
-        removalPolicy: RemovalPolicy.DESTROY,
+        logGroupName,
+        retention: RetentionDays.ONE_WEEK
     });
 
     return details
