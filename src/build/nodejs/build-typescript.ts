@@ -2,6 +2,8 @@ import { execSync } from 'child_process';
 import duration from "../../tools/duration";
 import {ensureDirSync} from "fs-extra";
 import {installNodeModules} from "./install-node-modules";
+import {copyFiles} from "../copy-files";
+import {resolve} from 'path';
 
 /**
  * Builds TypeScript source code.
@@ -25,6 +27,14 @@ export function buildTypeScript(srcDir: string, buildDir: string) {
         cwd: srcDir,
         stdio: 'inherit'
     });
+
+
+    // Manually Move the package.json and install prod dependencies
+    copyFiles([
+        resolve(srcDir, 'package.json'),
+        resolve(srcDir, 'package-lock.json'),
+    ], srcDir, buildDir);
+    installNodeModules(buildDir, ['dev', 'optional', 'peer']);
 
     // Log the duration of the build process
     console.log('NPM Install Duration (ms)', done())

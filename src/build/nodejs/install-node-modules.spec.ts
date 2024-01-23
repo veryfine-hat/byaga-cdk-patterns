@@ -21,7 +21,7 @@ it('installs node modules in the specified directory', () => {
 
     installNodeModules(dir, omit);
 
-    expect(child_process.execSync).toHaveBeenCalledWith(`npm i${omit.join(' --omit=')} --quite`, {
+    expect(child_process.execSync).toHaveBeenCalledWith(`npm i --omit=dev --omit=optional --quite`, {
         cwd: dir
     });
 });

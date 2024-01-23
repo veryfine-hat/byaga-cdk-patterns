@@ -3,6 +3,7 @@ import * as child_process from 'child_process';
 import * as fsExtra from 'fs-extra';
 import * as installNodeModulesModule from './install-node-modules';
 
+jest.mock("../copy-files")
 jest.mock('child_process', () => ({
     execSync: jest.fn(),
 }));
@@ -26,3 +27,12 @@ it('ensures build directory exists, installs node modules, and compiles TypeScri
         stdio: 'inherit'
     });
 });
+
+it('should install node modules in the destination directory', () => {
+const srcDir = 'src';
+    const buildDir = 'build';
+
+    buildTypeScript(srcDir, buildDir);
+
+    expect(installNodeModulesModule.installNodeModules).toHaveBeenCalledWith(buildDir, ['dev', 'optional', 'peer']);
+})
