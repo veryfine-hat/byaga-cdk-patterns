@@ -26,7 +26,13 @@ Then, you can use the patterns provided by the package in your CDK stacks.
 
 The package includes the following patterns:
 
-- [NodeJsLambda](./src/NodeJsLambda.md)
+- [createStack](./src/create-stack.md)
+- [createNodeJsLambda](./src/create-nodejs-lambda.md)
+
+And the below helpful functions:
+
+- [Building Code](./src/build-code.md)
+- [Generating Identifiers](./src/generate-identifier.md)
 
 ## Contributing
 
