@@ -1,7 +1,7 @@
 import {createStack, StackArguments} from './create-stack';
 import {Construct} from "constructs";
 import {Stack} from "aws-cdk-lib";
-import {loadConfiguration, StackConfiguration} from "./load-configuration";
+import {loadConfiguration} from "./load-configuration";
 
 jest.mock('aws-cdk-lib', () => ({
     Stack: jest.fn().mockImplementation(() => ({})),
