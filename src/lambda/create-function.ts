@@ -2,7 +2,6 @@ import {Function as Lambda, FunctionProps} from "aws-cdk-lib/aws-lambda";
 import {CfnOutput, Duration} from "aws-cdk-lib";
 import {applyHoneycombToLambda} from "../lambda-layer/apply-honeycomb-to-lambda";
 import {LogRetention, RetentionDays} from "aws-cdk-lib/aws-logs";
-import {RemovalPolicy} from "aws-cdk-lib/core";
 import {genStackResourceId, genStackResourceName} from "../generate-identifier";
 import {getCurrentStack} from "../create-stack";
 
@@ -50,7 +49,8 @@ export function createFunction(id: string, options: FunctionIntegrationProps) {
 
     new LogRetention(stack, genStackResourceId(id, 'log-retention'), {
         logGroupName,
-        retention: RetentionDays.ONE_WEEK
+        retention: RetentionDays.ONE_WEEK,
+        removalPolicy: RemovalPolicy.DESTROY
     });
 
     return details
