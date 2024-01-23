@@ -1,9 +1,11 @@
 import {Function as Lambda, FunctionProps} from "aws-cdk-lib/aws-lambda";
 import {CfnOutput, Duration} from "aws-cdk-lib";
 import {applyHoneycombToLambda} from "../lambda-layer/apply-honeycomb-to-lambda";
-import {LogRetention, RetentionDays} from "aws-cdk-lib/aws-logs";
+import {LogGroup, LogRetention, RetentionDays} from "aws-cdk-lib/aws-logs";
 import {genStackResourceId, genStackResourceName} from "../generate-identifier";
 import {getCurrentStack} from "../create-stack";
+import {RemovalPolicy} from "aws-cdk-lib/core";
+import {createLogGroup} from "../cloud-watch/create-log-group";
 
 /**
  * Interface for the properties of the FunctionIntegration class.
@@ -16,6 +18,7 @@ export interface FunctionIntegrationProps {
 
 export interface FunctionIntegration {
     id: string,
+    logGroup: LogGroup
     lambda: Lambda
 }
 
@@ -25,7 +28,7 @@ export interface FunctionIntegration {
  * @param {FunctionIntegrationProps} options - The properties of the function.
  */
 export function createFunction(id: string, options: FunctionIntegrationProps) {
-    const props = applyHoneycombToLambda({
+    const props: FunctionProps = applyHoneycombToLambda({
         functionName: genStackResourceName(id),
         memorySize: options.memory || 256,
         timeout: options.timeout || Duration.seconds(30),
@@ -33,12 +36,13 @@ export function createFunction(id: string, options: FunctionIntegrationProps) {
     })
 
     const {stack} = getCurrentStack()
-    const logGroupName = props.logGroupName ?? `/aws/lambda/${props.functionName}`;
+    const logGroup = createLogGroup(id, 'lambda');
     const details: FunctionIntegration = {
         id,
+        logGroup,
         lambda: new Lambda(stack, genStackResourceId(id, 'lambda'), {
             ...props,
-            logGroupName
+            logGroup
         })
     }
 
@@ -48,7 +52,7 @@ export function createFunction(id: string, options: FunctionIntegrationProps) {
     });
 
     new LogRetention(stack, genStackResourceId(id, 'log-retention'), {
-        logGroupName,
+        logGroupName: logGroup.logGroupName,
         retention: RetentionDays.ONE_WEEK,
         removalPolicy: RemovalPolicy.DESTROY
     });

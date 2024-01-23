@@ -1,15 +1,17 @@
-import {createFunction, FunctionIntegrationProps} from './create-function';
 import {Code, Function, FunctionProps, Runtime} from 'aws-cdk-lib/aws-lambda';
 import {Duration} from 'aws-cdk-lib';
 import {applyHoneycombToLambda} from "../lambda-layer/apply-honeycomb-to-lambda";
 import {DeployStack, getCurrentStack} from "../create-stack";
 import {Construct} from "constructs";
+import {createLogGroup} from "../cloud-watch/create-log-group";
+import {createFunction, FunctionIntegrationProps} from "./create-function";
 
 jest.mock('../lambda-layer/apply-honeycomb-to-lambda');
 jest.mock('aws-cdk-lib/aws-lambda');
 jest.mock('aws-cdk-lib/aws-logs');
 jest.mock('aws-cdk-lib');
 jest.mock("../create-stack");
+jest.mock("../cloud-watch/create-log-group")
 
 let stack: DeployStack;
 beforeEach(() => {
@@ -30,7 +32,10 @@ beforeEach(() => {
         },
         ...args
     }));
-    (Duration.seconds as jest.Mock).mockImplementation(s => `${s}s`)
+    (Duration.seconds as jest.Mock).mockImplementation(s => `${s}s`);
+    (createLogGroup as jest.Mock).mockImplementation((id: string, type: string, options: Record<string, string>) => ({
+        logGroupName: `${id}-${type}-${options?.category || 'aws'}`
+    }));
 });
 
 it('creates a new Function', () => {
@@ -49,7 +54,7 @@ it('creates a new Function', () => {
         stack: {cdk: 'stack'},
         id: "IdLambda",
         logGroup: {
-            logGroupName: 'log-group-name'
+            logGroupName: 'id-lambda-aws'
         },
         runtime: Runtime.NODEJS_20_X,
         memorySize: 256,
