@@ -45,7 +45,7 @@ it('creates a new Function', () => {
 
     const details = createFunction(id, options);
 
-    expect(details.function).toEqual(expect.objectContaining({
+    expect(details.lambda).toEqual(expect.objectContaining({
         stack: {cdk: 'stack'},
         id: "IdLambda",
         logGroup: {
@@ -69,7 +69,7 @@ it('applies honeycomb settings to the lambda', () => {
 
     const details = createFunction(id, options);
 
-    expect(details.function).toEqual(expect.objectContaining({
+    expect(details.lambda).toEqual(expect.objectContaining({
         with: 'honeycomb'
     }));
 });
@@ -84,7 +84,7 @@ it('creates a new FunctionIntegration instance with default memory and timeout',
 
     const details = createFunction(id, options);
 
-    expect(details.function).toEqual(expect.objectContaining({
+    expect(details.lambda).toEqual(expect.objectContaining({
         "memorySize": 256,
         "timeout": '30s'
     }));

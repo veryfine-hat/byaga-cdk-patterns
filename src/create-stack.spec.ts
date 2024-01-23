@@ -1,7 +1,7 @@
 import {createStack, StackArguments} from './create-stack';
 import {Construct} from "constructs";
 import {Stack} from "aws-cdk-lib";
-import {loadConfiguration} from "./load-configuration";
+import {loadConfiguration, StackConfiguration} from "./load-configuration";
 
 jest.mock('aws-cdk-lib', () => ({
     Stack: jest.fn().mockImplementation(() => ({})),
@@ -25,8 +25,7 @@ beforeEach(() => {
         stage: 'stage',
         project: 'project',
         owner: 'owner',
-        region: 'region',
-        config: {}
+        region: 'region'
     };
     (Stack as unknown as jest.Mock).mockReturnValue(stack)
 });
