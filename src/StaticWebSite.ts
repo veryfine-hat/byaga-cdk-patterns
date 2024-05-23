@@ -20,15 +20,12 @@ import {ARecord, RecordTarget} from "aws-cdk-lib/aws-route53";
 import {CloudFrontTarget} from "aws-cdk-lib/aws-route53-targets";
 import duration from './methods/duration';
 import {buildNodeSource} from './methods/build-node-source'
-import {IIgnoreOptions, no} from "./methods/walk-directory";
 import {Duration} from "aws-cdk-lib";
-import {RestApi} from "./RestApi";
 
 interface StaticWebSiteConfig {
     srcDir?: string,
     domain: IDomainConfig,
     env: NodeJS.ProcessEnv,
-    ignore?: IIgnoreOptions,
     proxy?: SourceConfiguration[]
 }
 
@@ -37,21 +34,13 @@ export class StaticWebSite {
         console.log('Deploying Static Web Site', id)
 
         const done = duration()
-        const childrenExcluded = props.ignore?.childrenExcluded || no;
-        const {buildDir, moduleChanged} = buildNodeSource('web', id, {
-            ignore: {
-                ...props.ignore,
-                childrenExcluded: stat => stat.name === 'out' || childrenExcluded(stat)
-            }
-        })
+        const buildDir = buildNodeSource('web', id)
 
-        if (moduleChanged) {
-            console.log('Building UI Source', id)
-            execSync('npm run export', {
-                    cwd: buildDir,
-                    env: props.env
-            })
-        }
+        console.log('Building UI Source', id)
+        execSync('npm run export', {
+                cwd: buildDir,
+                env: props.env
+        })
         console.log('Total Build Duration (ms)', done())
         const exportDir: string = buildDir + '/out';
 

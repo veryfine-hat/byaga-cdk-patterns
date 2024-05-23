@@ -42,16 +42,15 @@ export class DeployStack extends Stack {
             ...props,
             stackName: props.stackName + '-' + stage
         });
-        const stack = this;
-        stack.name = props.stackName || '';
+        this.name = props.stackName || '';
 
-        stack.stage = stage;
-        stack.project = props.project;
+        this.stage = stage;
+        this.project = props.project;
 
-        stack.tags.setTag('stage', stage);
-        stack.tags.setTag('stack', this.genName('ui-stack'));
-        stack.tags.setTag('project', props.project);
-        stack.tags.setTag('owner', props.owner);
+        this.tags.setTag('stage', stage);
+        this.tags.setTag('stack', this.genName('ui-stack'));
+        this.tags.setTag('project', props.project);
+        this.tags.setTag('owner', props.owner);
     }
 
     get(type: string, name: string) {
@@ -59,7 +58,7 @@ export class DeployStack extends Stack {
         return (items && items[name]) || null
     }
 
-    set(type: string, name: string, instance: any) {
+    set<T>(type: string, name: string, instance: T): T {
         this.registry[type] = this.registry[type] || {};
         this.registry[type][name] = instance;
         return instance;

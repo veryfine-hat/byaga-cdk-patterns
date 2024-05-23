@@ -1,5 +1,4 @@
 import {generateHash} from './generate-hash';
-import * as crypto from 'crypto';
 import * as fs from 'fs';
 
 jest.mock('fs');
