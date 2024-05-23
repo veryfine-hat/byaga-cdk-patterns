@@ -14,10 +14,10 @@ export interface StackConfiguration {
  * @param {string} stage - The stage for which to load the configuration. Defaults to the value of the STAGE environment variable, or "develop" if STAGE is not set.
  * @returns {StackConfiguration} The loaded configuration.
  */
-export function loadConfiguration(stage: string = process.env.STAGE || "develop"): StackConfiguration {
+export function loadConfiguration<T extends StackConfiguration>(stage: string = process.env.STAGE || "develop"): Partial<T> {
     const path = `config/${stage}.yml`
     if (fs.existsSync(path)) {
-        return yaml.load(fs.readFileSync(`config/${stage}.yml`).toString()) as StackConfiguration
+        return yaml.load(fs.readFileSync(`config/${stage}.yml`).toString()) as T
     }
-    return {};
+    return {} as T;
 }

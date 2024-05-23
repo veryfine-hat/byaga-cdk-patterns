@@ -16,14 +16,14 @@ export interface StackArguments extends StackProps {
 }
 
 /**
- * Interface for the deploy stack.
+ * Interface for the stack.
  */
-export interface DeployStack {
+export interface DeployStack<T extends StackConfiguration> {
     stack: Stack,
     name: string,
     stage: string,
     project: string,
-    config: StackConfiguration
+    config: Partial<T>
 }
 
 /**
@@ -32,7 +32,7 @@ export interface DeployStack {
  * @param {StackArguments} props - The arguments for creating the stack.
  * @returns {DeployStack} The created stack.
  */
-export function createStack(scope: IConstruct, props: StackArguments): DeployStack {
+export function createStack<T extends StackConfiguration>(scope: IConstruct, props: StackArguments): DeployStack<T> {
     const {stage = 'develop'} = props
     const stack = new Stack(scope, genId(props.stackName, stage), {
         ...props,
@@ -43,29 +43,29 @@ export function createStack(scope: IConstruct, props: StackArguments): DeploySta
     stack.tags.setTag('project', props.project);
     stack.tags.setTag('owner', props.owner);
 
-    return setCurrentStack({
+    return setCurrentStack<T>({
         stack,
         name: props.stackName,
         stage,
         project: props.project,
-        config: loadConfiguration(stage)
+        config: loadConfiguration<T>(stage)
     })
 }
 
-let currentStack: DeployStack;
+let currentStack: DeployStack<StackConfiguration>;
 
 /**
  * Helpful method to get the 'current' stack that is being defined.  Hopefully this will reduce the need to pass the stack around everywhere.
  */
-export function getCurrentStack() {
-    return currentStack;
+export function getCurrentStack<T extends StackConfiguration>(): DeployStack<T> {
+    return currentStack as DeployStack<T>;
 }
 
 /**
  * This sets the 'current' stack.  This should be automatic everywhere, but in case something goes wrong here is a way to force the issue
  * @param stack
  */
-export function setCurrentStack(stack: DeployStack) {
+export function setCurrentStack<T extends StackConfiguration>(stack: DeployStack<T>) {
     currentStack = stack;
     return stack;
 }
