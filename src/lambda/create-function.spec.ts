@@ -5,6 +5,7 @@ import {DeployStack, getCurrentStack} from "../create-stack";
 import {Construct} from "constructs";
 import {createLogGroup} from "../cloud-watch/create-log-group";
 import {createFunction, FunctionIntegrationProps} from "./create-function";
+import type {StackConfiguration} from "../load-configuration";
 
 jest.mock('../lambda-layer/apply-honeycomb-to-lambda');
 jest.mock('aws-cdk-lib/aws-lambda');
@@ -13,12 +14,12 @@ jest.mock('aws-cdk-lib');
 jest.mock("../create-stack");
 jest.mock("../cloud-watch/create-log-group")
 
-let stack: DeployStack;
+let stack: DeployStack<StackConfiguration>;
 beforeEach(() => {
     jest.clearAllMocks();
     stack = {
         stack: {cdk: 'stack'}
-    } as unknown as DeployStack
+    } as unknown as DeployStack<StackConfiguration>
     (applyHoneycombToLambda as jest.Mock).mockImplementation(p => ({...p, with: 'honeycomb'}));
     (Runtime as unknown as Record<string, string>).NODEJS_18_X = 'nodejs-18.x';
     (Runtime as unknown as Record<string, string>).NODEJS_20_X = 'nodejs-20.x';

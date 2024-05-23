@@ -3,8 +3,9 @@ import {applyHoneycombToLambda} from './apply-honeycomb-to-lambda';
 import SpyInstance = jest.SpyInstance;
 import {DeployStack, getCurrentStack} from "../create-stack";
 import {stringValue} from "../ssm";
+import type {StackConfiguration} from "../load-configuration";
 
-let mockStack: DeployStack;
+let mockStack: DeployStack<StackConfiguration>;
 let mockLayer: ILayerVersion;
 let fromLayerVersionArn: SpyInstance;
 
@@ -26,7 +27,7 @@ beforeEach(() => {
         stack: {
             region: 'us-test-1'
         }
-    } as DeployStack
+    } as DeployStack<StackConfiguration>
     mockLayer = {} as ILayerVersion;
     fromLayerVersionArn = jest.spyOn(LayerVersion, 'fromLayerVersionArn').mockReturnValue(mockLayer);
     (getCurrentStack as jest.Mock).mockReturnValue(mockStack);
