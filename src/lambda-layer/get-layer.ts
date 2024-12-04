@@ -1,7 +1,6 @@
 import {ILayerVersion, LayerVersion} from "aws-cdk-lib/aws-lambda"
-import {getCurrentStack} from "../create-stack";
+import {getCurrentStack, genStackResourceId} from "../cloud-formation";
 import {get, store} from "./layer-cache";
-import {genStackResourceId} from "../generate-identifier";
 
 export function getLayer(name: string, arn: string): ILayerVersion {
     let layer = get(arn)

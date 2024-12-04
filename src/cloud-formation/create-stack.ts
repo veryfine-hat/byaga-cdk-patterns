@@ -2,7 +2,7 @@ import {IConstruct} from "constructs";
 import {Stack} from "aws-cdk-lib";
 import {genId, genName} from "./generate-identifier";
 import {StackProps} from "aws-cdk-lib/core";
-import {loadConfiguration, StackConfiguration} from "./load-configuration";
+import {loadConfiguration, StackConfiguration} from "../load-configuration";
 
 /**
  * Interface for the arguments when creating a stack.
@@ -16,14 +16,14 @@ export interface StackArguments extends StackProps {
 }
 
 /**
- * Interface for the stack.
+ * Interface for the deploy stack.
  */
-export interface DeployStack<T extends StackConfiguration> {
+export interface DeployStack {
     stack: Stack,
     name: string,
     stage: string,
     project: string,
-    config: Partial<T>
+    config: StackConfiguration
 }
 
 /**
@@ -32,7 +32,7 @@ export interface DeployStack<T extends StackConfiguration> {
  * @param {StackArguments} props - The arguments for creating the stack.
  * @returns {DeployStack} The created stack.
  */
-export function createStack<T extends StackConfiguration>(scope: IConstruct, props: StackArguments): DeployStack<T> {
+export function createStack(scope: IConstruct, props: StackArguments): DeployStack {
     const {stage = 'develop'} = props
     const stack = new Stack(scope, genId(props.stackName, stage), {
         ...props,
@@ -43,29 +43,29 @@ export function createStack<T extends StackConfiguration>(scope: IConstruct, pro
     stack.tags.setTag('project', props.project);
     stack.tags.setTag('owner', props.owner);
 
-    return setCurrentStack<T>({
+    return setCurrentStack({
         stack,
         name: props.stackName,
         stage,
         project: props.project,
-        config: loadConfiguration<T>(stage)
+        config: loadConfiguration(stage)
     })
 }
 
-let currentStack: DeployStack<StackConfiguration>;
+let currentStack: DeployStack;
 
 /**
  * Helpful method to get the 'current' stack that is being defined.  Hopefully this will reduce the need to pass the stack around everywhere.
  */
-export function getCurrentStack<T extends StackConfiguration>(): DeployStack<T> {
-    return currentStack as DeployStack<T>;
+export function getCurrentStack() {
+    return currentStack;
 }
 
 /**
  * This sets the 'current' stack.  This should be automatic everywhere, but in case something goes wrong here is a way to force the issue
  * @param stack
  */
-export function setCurrentStack<T extends StackConfiguration>(stack: DeployStack<T>) {
+export function setCurrentStack(stack: DeployStack) {
     currentStack = stack;
     return stack;
 }

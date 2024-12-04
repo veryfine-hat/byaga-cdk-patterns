@@ -1,6 +1,6 @@
 import {FunctionProps} from "aws-cdk-lib/aws-lambda"
 import {stringValue} from "../ssm";
-import {getCurrentStack} from "../create-stack";
+import {getCurrentStack} from "../cloud-formation";
 import {getLayer} from "./get-layer";
 
 export function applyHoneycombToLambda(props: FunctionProps): FunctionProps {

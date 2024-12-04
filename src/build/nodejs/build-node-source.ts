@@ -34,7 +34,8 @@ export function buildNodeSource(type: string, id: string, options?: BuildOptions
 
     const isTypeScript = !!files.find(file => file.endsWith('tsconfig.json'))
 
-    isTypeScript ? buildTypeScript(srcDir, buildDir) : buildEcmaScript(files, srcDir, buildDir);
+    if (isTypeScript) buildTypeScript(srcDir, buildDir)
+    else buildEcmaScript(files, srcDir, buildDir)
 
     storeHash(type, id, hash)
     return buildDir

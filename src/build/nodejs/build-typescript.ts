@@ -1,4 +1,4 @@
-import { execSync } from 'child_process';
+import { spawnSync } from 'child_process';
 import duration from "../../tools/duration";
 import {ensureDirSync} from "fs-extra";
 import {installNodeModules} from "./install-node-modules";
@@ -23,7 +23,7 @@ export function buildTypeScript(srcDir: string, buildDir: string) {
     const done = duration()
 
     // Compile the TypeScript code
-    execSync(`npm run build -- --outDir ${buildDir}`, {
+    spawnSync('npm', ['run', 'build', '--', '--outDir', buildDir], {
         cwd: srcDir,
         stdio: 'inherit'
     });

@@ -26,8 +26,8 @@ Then, you can use the patterns provided by the package in your CDK stacks.
 
 The package includes the following patterns:
 
-- [createStack](./src/create-stack.md)
-- [createNodeJsLambda](./src/create-nodejs-lambda.md)
+- [createStack](./src/cloud-formation/create-stack.md)
+- [createNodeJsLambda](./src/lambda/createNodeJsLambda.md)
 
 And the below helpful functions:
 

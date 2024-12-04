@@ -1,7 +1,6 @@
 import {StringParameter} from "aws-cdk-lib/aws-ssm";
 import {get, store} from "./parameter-cache";
-import {getCurrentStack} from "../create-stack";
-import {genStackResourceId} from "../generate-identifier";
+import {getCurrentStack, genStackResourceId} from "../cloud-formation";
 import {SsmParameter, SsmParameterOptions} from "./SsmParameter";
 
 /**

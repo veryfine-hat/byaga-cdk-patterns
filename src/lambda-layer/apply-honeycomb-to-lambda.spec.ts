@@ -1,16 +1,15 @@
 import {Code, FunctionProps, ILayerVersion, LayerVersion, Runtime} from 'aws-cdk-lib/aws-lambda';
 import {applyHoneycombToLambda} from './apply-honeycomb-to-lambda';
 import SpyInstance = jest.SpyInstance;
-import {DeployStack, getCurrentStack} from "../create-stack";
+import {DeployStack, getCurrentStack} from "../cloud-formation";
 import {stringValue} from "../ssm";
-import type {StackConfiguration} from "../load-configuration";
 
-let mockStack: DeployStack<StackConfiguration>;
+let mockStack: DeployStack;
 let mockLayer: ILayerVersion;
 let fromLayerVersionArn: SpyInstance;
 
 jest.mock('../ssm')
-jest.mock('../create-stack')
+jest.mock('../cloud-formation')
 
 const existingLayer = {} as ILayerVersion;
 const props: FunctionProps = {
@@ -27,7 +26,7 @@ beforeEach(() => {
         stack: {
             region: 'us-test-1'
         }
-    } as DeployStack<StackConfiguration>
+    } as DeployStack
     mockLayer = {} as ILayerVersion;
     fromLayerVersionArn = jest.spyOn(LayerVersion, 'fromLayerVersionArn').mockReturnValue(mockLayer);
     (getCurrentStack as jest.Mock).mockReturnValue(mockStack);

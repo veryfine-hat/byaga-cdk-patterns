@@ -2,10 +2,10 @@ import {getExistingParameter} from './get-existing-parameter';
 import {get, store} from './parameter-cache';
 import {StringParameter} from 'aws-cdk-lib/aws-ssm';
 import {SsmParameterOptions} from "./SsmParameter";
-import {getCurrentStack} from "../create-stack";
+import {getCurrentStack} from "../cloud-formation";
 
 jest.mock('./parameter-cache');
-jest.mock('../create-stack');
+jest.mock('../cloud-formation');
 jest.mock('aws-cdk-lib/aws-ssm', () => ({
     StringParameter: {
         fromStringParameterName: jest.fn(),

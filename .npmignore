@@ -9,3 +9,7 @@ test-results
 Dockerfile
 Jenkinsfile
 jest.config.js
+.fleet
+archive
+.fleet
+.idea
