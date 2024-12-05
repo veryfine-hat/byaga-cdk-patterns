@@ -9,10 +9,10 @@ import {resolve} from 'path';
  * Builds TypeScript source code.
  * Ensures the build directory exists, installs necessary node modules, and compiles the TypeScript code.
  * @function buildTypeScript
- * @param {string} srcDir - The source directory containing the TypeScript code.
- * @param {string} buildDir - The output directory for the compiled JavaScript code.
+ * @param srcDir - The source directory containing the TypeScript code.
+ * @param buildDir - The output directory for the compiled JavaScript code.
  */
-export function buildTypeScript(srcDir: string, buildDir: string) {
+export function buildTypeScript(srcDir: string, buildDir: string): string {
     // Ensure the build directory exists
     ensureDirSync(buildDir);
 
@@ -38,4 +38,5 @@ export function buildTypeScript(srcDir: string, buildDir: string) {
 
     // Log the duration of the build process
     console.log('NPM Install Duration (ms)', done())
+    return buildDir
 }

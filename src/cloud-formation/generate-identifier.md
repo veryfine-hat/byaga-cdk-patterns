@@ -1,6 +1,6 @@
 # Generate Identifier
 
-The `generate-identifier.ts` file contains utility functions for generating consistent names and IDs across an application.
+This module provides functions for generating identifiers following specific naming conventions for use in AWS Cloud Formation Stacks.  The id's and names follow best practices across MOST, of AWS but from time to time errors will still happen because some resource type has name or id validation that doesn't match the rest of AWS
 
 ## genName
 

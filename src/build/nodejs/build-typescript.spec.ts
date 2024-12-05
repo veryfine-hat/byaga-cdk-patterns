@@ -5,7 +5,7 @@ import * as installNodeModulesModule from './install-node-modules';
 
 jest.mock("../copy-files")
 jest.mock('child_process', () => ({
-    execSync: jest.fn(),
+    spawnSync: jest.fn(),
 }));
 
 jest.mock('fs-extra', () => ({
@@ -22,14 +22,14 @@ it('ensures build directory exists, installs node modules, and compiles TypeScri
 
     expect(fsExtra.ensureDirSync).toHaveBeenCalledWith(buildDir);
     expect(installNodeModulesModule.installNodeModules).toHaveBeenCalledWith(srcDir);
-    expect(child_process.execSync).toHaveBeenCalledWith(`npm run build -- --outDir ${buildDir}`, {
+    expect(child_process.spawnSync).toHaveBeenCalledWith('npm', ['run', 'build', '--', '--outDir', buildDir], {
         cwd: srcDir,
         stdio: 'inherit'
     });
 });
 
 it('should install node modules in the destination directory', () => {
-const srcDir = 'src';
+    const srcDir = 'src';
     const buildDir = 'build';
 
     buildTypeScript(srcDir, buildDir);

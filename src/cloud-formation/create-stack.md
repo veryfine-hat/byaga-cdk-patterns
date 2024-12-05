@@ -1,6 +1,6 @@
-# Create Stack
+# createStack
 
-The `createStack` function is part of the `@byaga/cdk-patterns` package. It creates a new AWS CDK stack with the provided properties.
+This function creates a new AWS CDK stack adding some standard tags and loading the environment configuration from the build .yml files.
 
 ## Importing
 
@@ -35,16 +35,12 @@ Here's an example of how to use the `createStack` function:
 import { createStack } from '@byaga/cdk-patterns';
 import { App } from 'aws-cdk-lib';
 
-const app = new App();
-const props = {
+const { stack, config } = createStack(new App(), {
     stackName: 'MyStack',
     stage: 'prod',
     project: 'MyProject',
     owner: 'MyOwner',
     region: 'us-west-2',
-};
-
-const stack = createStack(app, props);
+});
+addThingToStack(config);
 ```
-
-In this example, a new stack named 'MyStack' is created with a stage of 'prod', a project of 'MyProject', an owner of 'MyOwner', and a region of 'us-west-2'.

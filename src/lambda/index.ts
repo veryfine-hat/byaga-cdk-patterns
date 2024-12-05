@@ -1,0 +1,1 @@
+export { createNodeJsLambda } from './create-nodejs-lambda';

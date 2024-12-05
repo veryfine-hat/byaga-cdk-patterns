@@ -20,8 +20,12 @@ export interface CouldFrontDistributionConfig {
     webAclId?: string
 }
 
+/**
+ * Initializes a CloudFront distribution with common properties needed by your average static SPA site.
+ * @param id - The identifier for the distribution which will be used to compute the ids of all resources created to support it.
+ * @param config - The pieces of the distribution that can/should be customized for a specific use case.
+ */
 export function createDistribution(id: string, config: CouldFrontDistributionConfig) {
-
     const distro = new Distribution(getCurrentStack().stack, genId(id, 'distribution'), {
         enabled: true,
         defaultRootObject: 'index.html',

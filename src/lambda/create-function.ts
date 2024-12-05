@@ -1,15 +1,16 @@
 import {CfnOutput, Duration, RemovalPolicy} from "aws-cdk-lib";
-import {Function as Lambda, FunctionProps} from "aws-cdk-lib/aws-lambda";
+import {Function as Lambda, FunctionProps, Runtime} from "aws-cdk-lib/aws-lambda";
 import {LogGroup, LogRetention, RetentionDays} from "aws-cdk-lib/aws-logs";
 import {applyHoneycombToLambda} from "../lambda-layer";
 import {genStackResourceId, genStackResourceName, getCurrentStack} from "../cloud-formation";
 import {createLogGroup} from "../cloud-watch";
 
+type FunctionPropsWithDefaults = Partial<FunctionProps> & Pick<FunctionProps, 'code' | 'handler'>
 /**
  * Interface for the properties of the FunctionIntegration class.
  */
 export interface FunctionIntegrationProps {
-    funcProps?: FunctionProps,
+    funcProps?: FunctionPropsWithDefaults,
     timeout?: Duration
     memory?: number
 }
@@ -30,7 +31,8 @@ export function createFunction(id: string, options: FunctionIntegrationProps) {
         functionName: genStackResourceName(id),
         memorySize: options.memory || 256,
         timeout: options.timeout || Duration.seconds(30),
-        ...(options.funcProps || {}) as FunctionProps
+        runtime: Runtime.NODEJS_LATEST,
+        ...(options.funcProps || {}) as FunctionPropsWithDefaults
     })
 
     const {stack} = getCurrentStack()

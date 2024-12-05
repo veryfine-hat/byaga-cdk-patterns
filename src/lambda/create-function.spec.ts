@@ -10,7 +10,7 @@ jest.mock('../lambda-layer/apply-honeycomb-to-lambda');
 jest.mock('aws-cdk-lib/aws-lambda');
 jest.mock('aws-cdk-lib/aws-logs');
 jest.mock('aws-cdk-lib');
-jest.mock("../cloud-formation");
+jest.mock("../cloud-formation/create-stack");
 jest.mock("../cloud-watch/create-log-group")
 
 let stack: DeployStack;

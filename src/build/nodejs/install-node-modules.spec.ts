@@ -3,7 +3,7 @@ import * as child_process from 'child_process';
 import duration from "../../tools/duration";
 
 jest.mock('child_process', () => ({
-    execSync: jest.fn(),
+    spawnSync: jest.fn(),
 }));
 jest.mock('../../tools/duration', () => {
     const done = jest.fn()
@@ -21,8 +21,9 @@ it('installs node modules in the specified directory', () => {
 
     installNodeModules(dir, omit);
 
-    expect(child_process.execSync).toHaveBeenCalledWith(`npm i --omit=dev --omit=optional --quite`, {
-        cwd: dir
+    expect(child_process.spawnSync).toHaveBeenCalledWith('npm', ['i', '--omit=dev', '--omit=optional', '--quiet'], {
+        cwd: dir,
+        stdio: 'inherit'
     });
 });
 
@@ -31,8 +32,9 @@ it('installs node modules without omitting any types of dependencies', () => {
 
     installNodeModules(dir);
 
-    expect(child_process.execSync).toHaveBeenCalledWith(`npm i --quite`, {
-        cwd: dir
+    expect(child_process.spawnSync).toHaveBeenCalledWith('npm', ['i', '--quiet'], {
+        cwd: dir,
+        stdio: 'inherit'
     });
 });
 

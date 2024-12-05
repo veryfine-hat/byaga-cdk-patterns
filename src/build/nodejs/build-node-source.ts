@@ -7,16 +7,22 @@ import {buildEcmaScript} from "./build-ecmascript";
 import {buildTypeScript} from "./build-typescript";
 import {getStoredHash, storeHash} from "../hash-file";
 
+/**
+ * Additional Build options which can be used to customize the build process.
+ */
 export interface BuildOptions {
+    /**
+     * @prop subdirectory - optional subdirectory to build, useful for a-standard builds such as lambda-layers which nest the modules in a '/nodejs/' directory
+     */
     subdirectory?: string
 }
 
 /**
  * Builds the source code for a Node.js project.
  * @function buildNodeSource
- * @param {string} type - The type of the source code.
- * @param {string} id - The ID of the source code.
- * @param {BuildOptions} [options] - Options for building the source code.
+ * @param type - The type of the source code.
+ * @param id - The ID of the source code.
+ * @param options - Options for building the source code.
  * @returns - The build directory containing the resulting source code
  */
 export function buildNodeSource(type: string, id: string, options?: BuildOptions): string {

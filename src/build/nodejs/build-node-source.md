@@ -1,6 +1,6 @@
-# Build Node Source
+# buildNodeSource(type, id, options)
 
-The `buildNodeSource` function is part of the `@byaga/cdk-patterns` package. It builds the source code for a Node.js project.
+This function builds the source code for a Node.js project and will attempt to detect if that code is TypeScript or JavaScript.
 
 ## Importing
 
@@ -14,7 +14,7 @@ import { buildNodeSource } from '@byaga/cdk-patterns';
 
 The `buildNodeSource` function takes three parameters:
 
-- `type`: A string that represents the type of the source code.
+- `type`: A string that represents the type of the source code, used for determining the source and dest locations for the code.  will look in ./src/{type}/{id} to find files.
 - `id`: A string that represents the ID of the source code.
 - `options`: An optional object of type `BuildOptions` that contains options for building the source code.
 

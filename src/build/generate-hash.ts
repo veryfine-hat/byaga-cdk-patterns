@@ -3,9 +3,8 @@ import { readFileSync} from 'fs';
 
 /**
  * Generates a hash for each file in the provided file paths and combines them into a single hash.
- * @function generateHash
- * @param {string[]} filePaths - The file paths to generate hashes for.
- * @returns {string} - The combined hash of all the files.
+ * @param filePaths - The file paths to generate hashes for.
+ * @returns A hash string representing the combination of each file
  */
 export function generateHash(filePaths: string[]): string {
     // Map over each file path

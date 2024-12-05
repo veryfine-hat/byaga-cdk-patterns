@@ -1,6 +1,7 @@
 import {spawnSync} from "child_process";
 import duration from "../../tools/duration";
 
+export type OmitType = 'dev' | 'optional' | 'peer' | string
 /**
  * Installs node modules in a specified directory.
  *
@@ -9,10 +10,10 @@ import duration from "../../tools/duration";
  * It also measures and logs the duration of the `npm install` command.
  *
  * @function installNodeModules
- * @param {string} dir - The directory in which to run `npm install`.
- * @param {string[]} [omit=[]] - The types of dependencies to omit. Possible values are 'dev', 'optional', and 'peer'.
+ * @param dir - The directory in which to run `npm install`.
+ * @param omit - The types of dependencies to omit. Possible values are 'dev', 'optional', and 'peer'.
  */
-export function installNodeModules(dir: string, omit: string[] = []) {
+export function installNodeModules(dir: string, omit: OmitType[] = []): void {
     // Start measuring the duration of the `npm install` command
     const installComplete = duration()
     // Run the `npm install` command in the specified directory, omitting certain types of dependencies if specified

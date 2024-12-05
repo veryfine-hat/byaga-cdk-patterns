@@ -6,10 +6,10 @@ import { sync } from 'glob';
 /**
  * Returns an array of file paths from a directory, excluding files specified in an ignore file.
  *
- * @param {string} dir - The directory to get files from.
- * @param {string} [ignoreFile='.cdkignore'] - The ignore file in the directory. Defaults to '.cdkignore'.
+ * @param dir - The directory to get files from.
+ * @param ignoreFile - The ignore file in the directory. Defaults to '.cdkignore'.
  *
- * @returns {string[]} An array of file paths.
+ * @returns An array of file paths.
  */
 export const getFiles = (dir: string, ignoreFile: string = '.cdkignore'): string[] => {
     // Create a new ignore manager
