@@ -3,16 +3,7 @@ import {get} from './parameter-cache';
 import {IGrantable, PolicyStatement} from 'aws-cdk-lib/aws-iam';
 import {IKey} from "aws-cdk-lib/aws-kms";
 
-jest.mock('./parameter-cache', () => ({
-    get: jest.fn(),
-}));
-jest.mock('aws-cdk-lib/aws-iam', () => ({
-    PolicyStatement: jest.fn(),
-    Effect: { ALLOW: 'ALLOW' },
-}));
-jest.mock('aws-cdk-lib/aws-kms', () => ({
-    Key: jest.fn(),
-}));
+jest.unmock('./grant-read');
 
 const name = 'name';
 const grantee = {

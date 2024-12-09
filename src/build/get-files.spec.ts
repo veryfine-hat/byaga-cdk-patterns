@@ -5,14 +5,9 @@ import ignore from 'ignore';
 import {sync} from 'glob';
 import {relative} from "path";
 
+jest.unmock('./get-files');
 jest.mock('fs');
 jest.mock('path');
-jest.mock('ignore', () => {
-    const add = jest.fn();
-    const ignores = jest.fn();
-    return () => ({ add, ignores });
-});
-jest.mock('glob');
 
 it('returns files from directory excluding ignored files', () => {
     const dir = 'dir';
@@ -24,7 +19,6 @@ it('returns files from directory excluding ignored files', () => {
     (path.resolve as jest.Mock).mockReturnValue(ignoreFilePath);
     (fs.existsSync as jest.Mock).mockReturnValue(true);
     (fs.readFileSync as jest.Mock).mockReturnValue(ignoreFileContents);
-    (sync as unknown as jest.Mock).mockReturnValue(files);
     (ignore().ignores as unknown as jest.Mock).mockReturnValue(false);
 
     const result = getFiles(dir, ignoreFile);

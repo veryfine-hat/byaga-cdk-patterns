@@ -1,3 +1,5 @@
-export { output } from './output'
+export { createStack, StackArguments } from './create-stack'
+export { getCurrentStack } from './current-stack'
+export { DeployStack } from './DeployStack'
 export { genId, genName, genStackResourceId, genStackResourceName } from './generate-identifier'
-export { createStack, DeployStack, StackArguments, getCurrentStack } from './create-stack'
+export { output } from './output'

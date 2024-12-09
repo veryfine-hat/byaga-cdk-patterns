@@ -13,3 +13,4 @@ jest.config.js
 archive
 .fleet
 .idea
+__mocks__

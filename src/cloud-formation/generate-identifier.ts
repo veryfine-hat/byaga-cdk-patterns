@@ -1,4 +1,4 @@
-import {getCurrentStack} from "./create-stack";
+import {getCurrentStack} from "./current-stack";
 
 /**
  * Generates a name by joining the provided strings with a hyphen.

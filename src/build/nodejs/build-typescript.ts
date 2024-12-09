@@ -1,5 +1,5 @@
 import { spawnSync } from 'child_process';
-import duration from "../../tools/duration";
+import {duration} from "../../tools";
 import {ensureDirSync} from "fs-extra";
 import {installNodeModules} from "./install-node-modules";
 import {copyFiles} from "../copy-files";

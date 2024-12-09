@@ -1,25 +1,18 @@
 import {createStack, StackArguments} from './create-stack';
 import {Construct} from "constructs";
-import {Stack} from "aws-cdk-lib";
+import {Stack} from "aws-cdk-lib/core";
 import {loadConfiguration} from "../load-configuration";
+import {setCurrentStack} from "./current-stack";
+import {MockStack} from "../../__mocks__/aws-cdk-lib/core";
 
-jest.mock('aws-cdk-lib', () => ({
-    Stack: jest.fn().mockImplementation(() => ({})),
-}));
-jest.mock('../load-configuration')
+jest.unmock('./create-stack');
 
-let stack: Stack;
 let scope: Construct;
 let props: StackArguments;
 
 beforeEach(() => {
     jest.clearAllMocks();
     scope = {} as Construct;
-    stack = {
-        tags: {
-            setTag: jest.fn(),
-        }
-    } as unknown as Stack;
     props = {
         stackName: 'stackName',
         stage: 'stage',
@@ -27,7 +20,7 @@ beforeEach(() => {
         owner: 'owner',
         region: 'region'
     };
-    (Stack as unknown as jest.Mock).mockReturnValue(stack)
+    (setCurrentStack as jest.Mock).mockImplementation(s => s)
 });
 
 it('creates a new stack with default stage', () => {
@@ -35,11 +28,11 @@ it('creates a new stack with default stage', () => {
 
     const result = createStack(scope, props);
 
-    expect(Stack).toHaveBeenCalledWith(scope, 'StackNameDevelop', expect.objectContaining({
-        stackName: 'stack-name-develop',
+    expect(Stack).toHaveBeenCalledWith(scope, 'Id:StackStage:stackName', expect.objectContaining({
+        stackName: 'name:stack-stage:stackName',
     }));
     expect(result).toEqual(expect.objectContaining({
-        stack: stack,
+        stack: MockStack,
         name: props.stackName,
         stage: 'develop',
         project: props.project,
@@ -49,11 +42,11 @@ it('creates a new stack with default stage', () => {
 it('creates a new stack with provided stage', () => {
     const result = createStack(scope, props);
 
-    expect(Stack).toHaveBeenCalledWith(scope, 'StackNameStage', expect.objectContaining({
-        stackName: 'stack-name-stage',
+    expect(Stack).toHaveBeenCalledWith(scope, 'Id:StackStage:stackName', expect.objectContaining({
+        stackName: 'name:stack-stage:stackName',
     }));
     expect(result).toEqual(expect.objectContaining({
-        stack: stack,
+        stack: MockStack,
         name: props.stackName,
         stage: props.stage,
         project: props.project,
@@ -63,10 +56,10 @@ it('creates a new stack with provided stage', () => {
 it('will add standard tags to the stack', () => {
     createStack(scope, props);
 
-    expect(stack.tags.setTag).toHaveBeenCalledWith('stage', props.stage);
-    expect(stack.tags.setTag).toHaveBeenCalledWith('stack', 'stack-name-stage');
-    expect(stack.tags.setTag).toHaveBeenCalledWith('project', props.project);
-    expect(stack.tags.setTag).toHaveBeenCalledWith('owner', props.owner);
+    expect(MockStack.tags.setTag).toHaveBeenCalledWith('stage', props.stage);
+    expect(MockStack.tags.setTag).toHaveBeenCalledWith('stack', 'name:stack-stage:stackName');
+    expect(MockStack.tags.setTag).toHaveBeenCalledWith('project', props.project);
+    expect(MockStack.tags.setTag).toHaveBeenCalledWith('owner', props.owner);
 })
 
 it('will load the configuration for the stage', () => {

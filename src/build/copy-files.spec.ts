@@ -2,8 +2,12 @@ import {copyFiles} from './copy-files';
 import * as fse from 'fs-extra';
 import * as path from 'path';
 
-jest.mock('fs-extra');
+jest.unmock('./copy-files');
 jest.mock('path');
+
+beforeEach(() => {
+    jest.spyOn(console, 'log').mockImplementation(() => {});
+})
 
 it('copies files from source directory to build directory', () => {
     const files = ['file1', 'file2'];

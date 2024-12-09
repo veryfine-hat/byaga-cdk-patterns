@@ -7,12 +7,7 @@ import {getBuildDirectory, getSourceDirectory} from "../get-source-directory";
 import {generateHash} from "../generate-hash";
 import {getStoredHash} from "../hash-file";
 
-jest.mock('../hash-file');
-jest.mock('../get-source-directory');
-jest.mock('../get-files');
-jest.mock('../generate-hash');
-jest.mock('./build-ecmascript');
-jest.mock('./build-typescript');
+jest.unmock('./build-node-source')
 
 beforeEach(() => {
     jest.clearAllMocks();
@@ -21,6 +16,7 @@ beforeEach(() => {
     (getSourceDirectory as jest.Mock).mockReturnValue('S:/src-dir/');
     (generateHash as jest.Mock).mockReturnValue('hash');
     (getStoredHash as jest.Mock).mockReturnValue('oldHash');
+    jest.spyOn(console, 'log').mockImplementation(() => {});
 })
 
 it('returns build directory', () => {

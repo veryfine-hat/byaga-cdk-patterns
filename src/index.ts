@@ -9,6 +9,5 @@ export * from "./route53"
 export * from "./s3"
 export * from "./ssm"
 export * from './tools'
-export {StackConfiguration} from './load-configuration'
 
 

@@ -1,41 +1,11 @@
-import {Code, Function, FunctionProps, Runtime} from 'aws-cdk-lib/aws-lambda';
-import {Duration} from 'aws-cdk-lib';
-import {applyHoneycombToLambda} from "../lambda-layer";
-import {DeployStack, getCurrentStack} from "../cloud-formation";
-import {Construct} from "constructs";
-import {createLogGroup} from "../cloud-watch";
 import {createFunction, FunctionIntegrationProps} from "./create-function";
+import {type FunctionProps, Runtime} from 'aws-cdk-lib/aws-lambda';
+import {Duration} from 'aws-cdk-lib';
 
-jest.mock('../lambda-layer/apply-honeycomb-to-lambda');
-jest.mock('aws-cdk-lib/aws-lambda');
-jest.mock('aws-cdk-lib/aws-logs');
-jest.mock('aws-cdk-lib');
-jest.mock("../cloud-formation/create-stack");
-jest.mock("../cloud-watch/create-log-group")
+jest.unmock('./create-function');
 
-let stack: DeployStack;
 beforeEach(() => {
     jest.clearAllMocks();
-    stack = {
-        stack: {cdk: 'stack'}
-    } as unknown as DeployStack
-    (applyHoneycombToLambda as jest.Mock).mockImplementation(p => ({...p, with: 'honeycomb'}));
-    (Runtime as unknown as Record<string, string>).NODEJS_18_X = 'nodejs-18.x';
-    (Runtime as unknown as Record<string, string>).NODEJS_20_X = 'nodejs-20.x';
-    (Code as unknown as Record<string, jest.Mock>).fromAsset = jest.fn(path => ({"fromAsset": path}));
-    (getCurrentStack as jest.Mock).mockReturnValue(stack);
-    (Function as unknown as jest.Mock).mockImplementation((stack: Construct, id: string, args: FunctionProps) => ({
-        stack,
-        id,
-        logGroup: {
-            logGroupName: 'log-group-name'
-        },
-        ...args
-    }));
-    (Duration.seconds as jest.Mock).mockImplementation(s => `${s}s`);
-    (createLogGroup as jest.Mock).mockImplementation((id: string, type: string, options: Record<string, string>) => ({
-        logGroupName: `${id}-${type}-${options?.category || 'aws'}`
-    }));
 });
 
 it('creates a new Function', () => {
@@ -51,8 +21,8 @@ it('creates a new Function', () => {
     const details = createFunction(id, options);
 
     expect(details.lambda).toEqual(expect.objectContaining({
-        stack: {cdk: 'stack'},
-        id: "IdLambda",
+        stack: {id: 'my-stack'},
+        id: "ResourceId:StackStage:id",
         logGroup: {
             logGroupName: 'id-lambda-aws'
         },

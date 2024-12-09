@@ -1,7 +1,7 @@
 import {genId, genName, genStackResourceId, genStackResourceName} from './generate-identifier';
-import {getCurrentStack} from "./create-stack";
+import {getCurrentStack} from "./current-stack";
 
-jest.mock("./create-stack")
+jest.unmock('./generate-identifier');
 
 describe('genName', () => {
     it('generates a name by joining provided strings with a hyphen', () => {

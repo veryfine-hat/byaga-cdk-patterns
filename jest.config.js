@@ -2,6 +2,8 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   testPathIgnorePatterns: ['/node_modules/', '/dist/', '/lib/', '/archive/', '/test-results/'],
+  automock: true,
+  clearMocks: true,
   reporters: [
     "default",
     [

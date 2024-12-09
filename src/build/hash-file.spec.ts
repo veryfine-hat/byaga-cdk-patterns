@@ -2,8 +2,8 @@ import {getStoredHash, storeHash} from './hash-file';
 import {writeFileSync} from "fs";
 import {existsSync, readFileSync, ensureDirSync} from 'fs-extra'
 
-jest.mock('fs');
-jest.mock('fs-extra');
+jest.unmock('./hash-file')
+jest.mock('fs')
 jest.mock('./get-source-directory', () => ({
     distributionRoot: '/mock/distribution/root',
     getBuildDirectory: jest.fn()

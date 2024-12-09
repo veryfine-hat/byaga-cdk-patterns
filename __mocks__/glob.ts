@@ -1,0 +1,1 @@
+export const sync = jest.fn(() => ['file1', 'file2']);

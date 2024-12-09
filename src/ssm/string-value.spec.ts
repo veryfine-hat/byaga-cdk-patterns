@@ -1,7 +1,7 @@
 import {stringValue} from './string-value';
 import {getExistingParameter} from './get-existing-parameter';
 
-jest.mock('./get-existing-parameter');
+jest.unmock('./string-value');
 
 const name = 'name';
 const options = {};

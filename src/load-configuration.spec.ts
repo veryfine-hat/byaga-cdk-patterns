@@ -2,13 +2,7 @@ import {loadConfiguration} from './load-configuration';
 import * as yaml from 'js-yaml';
 import * as fs from 'fs-extra';
 
-jest.mock('js-yaml', () => ({
-    load: jest.fn(),
-}));
-jest.mock('fs-extra', () => ({
-    existsSync: jest.fn(),
-    readFileSync: jest.fn(),
-}));
+jest.unmock('./load-configuration')
 
 const stage = 'stage';
 const config = {};

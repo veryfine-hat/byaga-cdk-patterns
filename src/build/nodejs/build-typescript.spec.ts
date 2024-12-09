@@ -3,16 +3,13 @@ import * as child_process from 'child_process';
 import * as fsExtra from 'fs-extra';
 import * as installNodeModulesModule from './install-node-modules';
 
-jest.mock("../copy-files")
-jest.mock('child_process', () => ({
-    spawnSync: jest.fn(),
-}));
+jest.unmock('./build-typescript')
+jest.mock('child_process')
+jest.mock('../../tools', () => ({duration: jest.fn(() => () => 0)}));
 
-jest.mock('fs-extra', () => ({
-    ensureDirSync: jest.fn(),
-}));
-
-jest.mock('./install-node-modules');
+beforeEach(() => {
+    jest.spyOn(console, 'log').mockImplementation(() => null);
+})
 
 it('ensures build directory exists, installs node modules, and compiles TypeScript code', () => {
     const srcDir = 'src';

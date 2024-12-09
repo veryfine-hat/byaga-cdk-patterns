@@ -1,21 +1,11 @@
 import {createNodeJsLambda} from './create-nodejs-lambda';
-import {buildNodeSource} from '../build/nodejs/build-node-source';
+import {buildNodeSource} from '../build';
 import {Code, Runtime} from 'aws-cdk-lib/aws-lambda';
 import duration from '../tools/duration';
 import {createFunction} from "./create-function";
 import {Duration} from "aws-cdk-lib";
 
-jest.mock('./create-function');
-jest.mock('../build/nodejs/build-node-source');
-jest.mock('../tools/duration');
-jest.mock('aws-cdk-lib/aws-lambda', () => ({
-    Code: {
-        fromAsset: jest.fn(),
-    },
-    Runtime: {
-        NODEJS_20_X: 'nodejs-20.x',
-    },
-}));
+jest.unmock('./create-nodejs-lambda')
 
 const id = 'id';
 const options = {
@@ -31,6 +21,7 @@ beforeEach(() => {
     (buildNodeSource as jest.Mock).mockReturnValue('build-dir');
     (duration as jest.Mock).mockReturnValue(() => 1000);
     (Code.fromAsset as jest.Mock).mockReturnValue('code');
+    jest.spyOn(console, 'log').mockImplementation(() => {});
 });
 
 it('creates a new Node.js AWS Lambda function', () => {

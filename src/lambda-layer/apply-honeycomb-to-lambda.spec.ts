@@ -1,19 +1,16 @@
-import {Code, FunctionProps, ILayerVersion, LayerVersion, Runtime} from 'aws-cdk-lib/aws-lambda';
+import {Code, FunctionProps, ILayerVersion, Runtime} from 'aws-cdk-lib/aws-lambda';
 import {applyHoneycombToLambda} from './apply-honeycomb-to-lambda';
-import SpyInstance = jest.SpyInstance;
 import {DeployStack, getCurrentStack} from "../cloud-formation";
 import {stringValue} from "../ssm";
 
-let mockStack: DeployStack;
-let mockLayer: ILayerVersion;
-let fromLayerVersionArn: SpyInstance;
+let mockStack: DeployStack<object>;
 
-jest.mock('../ssm')
-jest.mock('../cloud-formation')
+jest.unmock('./apply-honeycomb-to-lambda')
+jest.unmock('./get-layer')
 
 const existingLayer = {} as ILayerVersion;
 const props: FunctionProps = {
-    runtime: Runtime.NODEJS_18_X,
+    runtime: Runtime.NODEJS_LATEST,
     handler: 'index.handler',
     code: Code.fromInline('exports.handler = function(event, ctx, cb) { return cb(null, "hi"); }'),
     environment: {existingVar: 'existingValue'},
@@ -26,19 +23,15 @@ beforeEach(() => {
         stack: {
             region: 'us-test-1'
         }
-    } as DeployStack
-    mockLayer = {} as ILayerVersion;
-    fromLayerVersionArn = jest.spyOn(LayerVersion, 'fromLayerVersionArn').mockReturnValue(mockLayer);
+    } as DeployStack<object>
     (getCurrentStack as jest.Mock).mockReturnValue(mockStack);
 });
 
-afterEach(() => {
-    fromLayerVersionArn.mockRestore();
-})
-
 it('should add honeycomb layer to function props', () => {
     const result = applyHoneycombToLambda(props);
-    expect(result.layers).toContain(mockLayer);
+    expect(result.layers).toEqual(expect.arrayContaining([expect.objectContaining({
+        arn: "arn:aws:lambda:us-test-1:702835727665:layer:honeycomb-lambda-extension-x86_64-v11-1-1:1"
+    })]));
 });
 
 it('should add honeycomb environment variables to function props', () => {

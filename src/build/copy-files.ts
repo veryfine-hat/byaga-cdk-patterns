@@ -1,6 +1,6 @@
 import * as path from 'path'
 import * as fse from "fs-extra";
-import duration from "../tools/duration";
+import {duration} from "../tools";
 
 /**
  * Copies files from the source directory to the build directory.

@@ -2,17 +2,11 @@ import {installNodeModules} from './install-node-modules';
 import * as child_process from 'child_process';
 import duration from "../../tools/duration";
 
-jest.mock('child_process', () => ({
-    spawnSync: jest.fn(),
-}));
-jest.mock('../../tools/duration', () => {
-    const done = jest.fn()
-    return () => done;
-});
-let logSpy: jest.SpyInstance;
+jest.unmock('./install-node-modules');
+jest.mock('child_process');
 beforeEach(() => {
-    jest.clearAllMocks();
-    logSpy = jest.spyOn(console, 'log');
+    (duration as jest.Mock).mockReturnValue(() => 123)
+    jest.spyOn(console, 'log').mockImplementation(() => {});
 })
 
 it('installs node modules in the specified directory', () => {
@@ -39,9 +33,9 @@ it('installs node modules without omitting any types of dependencies', () => {
 });
 
 it('measures and logs the duration of the npm install command', () => {
+    const logSpy = jest.spyOn(console, 'log');
     const dir = 'dir';
     const omit = ['dev', 'optional'];
-    (duration() as unknown as jest.Mock).mockReturnValue(123);
 
     installNodeModules(dir, omit);
 

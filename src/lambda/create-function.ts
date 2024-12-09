@@ -1,8 +1,8 @@
-import {CfnOutput, Duration, RemovalPolicy} from "aws-cdk-lib";
+import {Duration, RemovalPolicy} from "aws-cdk-lib";
 import {Function as Lambda, FunctionProps, Runtime} from "aws-cdk-lib/aws-lambda";
 import {LogGroup, LogRetention, RetentionDays} from "aws-cdk-lib/aws-logs";
 import {applyHoneycombToLambda} from "../lambda-layer";
-import {genStackResourceId, genStackResourceName, getCurrentStack} from "../cloud-formation";
+import {genId, genStackResourceId, genStackResourceName, getCurrentStack, output} from "../cloud-formation";
 import {createLogGroup} from "../cloud-watch";
 
 type FunctionPropsWithDefaults = Partial<FunctionProps> & Pick<FunctionProps, 'code' | 'handler'>
@@ -46,10 +46,7 @@ export function createFunction(id: string, options: FunctionIntegrationProps) {
         })
     }
 
-    new CfnOutput(stack, genStackResourceId(id, 'function-name'), {
-        value: details.lambda.functionName,
-        exportName: genStackResourceName(id, 'function-name')
-    });
+    output(genId(id, 'function-name'), details.lambda.functionName)
 
     new LogRetention(stack, genStackResourceId(id, 'log-retention'), {
         logGroupName: logGroup.logGroupName,

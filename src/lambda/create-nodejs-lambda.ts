@@ -1,6 +1,6 @@
 import {Code, FunctionOptions, Runtime} from "aws-cdk-lib/aws-lambda"
 import {createFunction, FunctionIntegration} from "./create-function";
-import {buildNodeSource} from "../build/nodejs/build-node-source";
+import {buildNodeSource} from "../build";
 import {Duration} from "aws-cdk-lib";
 import duration from "../tools/duration";
 

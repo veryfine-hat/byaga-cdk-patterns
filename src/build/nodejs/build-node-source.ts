@@ -2,7 +2,7 @@ import {existsSync, emptyDirSync} from "fs-extra";
 import {getBuildDirectory, getSourceDirectory} from '../get-source-directory'
 import {getFiles} from "../get-files";
 import {generateHash} from "../generate-hash";
-import duration from "../../tools/duration";
+import {duration} from "../../tools";
 import {buildEcmaScript} from "./build-ecmascript";
 import {buildTypeScript} from "./build-typescript";
 import {getStoredHash, storeHash} from "../hash-file";

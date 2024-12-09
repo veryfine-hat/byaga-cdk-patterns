@@ -1,5 +1,5 @@
-import {IStringParameter} from "aws-cdk-lib/aws-ssm";
-import {IKey} from "aws-cdk-lib/aws-kms";
+import type {IStringParameter} from "aws-cdk-lib/aws-ssm";
+import type {IKey} from "aws-cdk-lib/aws-kms";
 
 
 export interface SsmParameterOptions {

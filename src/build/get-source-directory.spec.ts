@@ -1,6 +1,12 @@
 import { getSourceDirectory, getBuildDirectory } from './get-source-directory';
 import { resolve } from 'path';
 
+jest.unmock('./get-source-directory');
+jest.mock('path', () => ({
+    resolve: (...paths: string[]) => paths.join('/'),
+    join: (...paths: string[]) => paths.join('/')
+}));
+
 describe('getSourceDirectory', () => {
     it('should return the correct path when subdir is provided', () => {
         const type = 'type';

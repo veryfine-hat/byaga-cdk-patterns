@@ -1,9 +1,8 @@
 import {buildEcmaScript} from './build-ecmascript';
-import * as copyFilesModule from '../copy-files';
-import * as installNodeModulesModule from './install-node-modules';
+import {copyFiles} from '../copy-files';
+import {installNodeModules} from './install-node-modules';
 
-jest.mock('../copy-files');
-jest.mock('./install-node-modules');
+jest.unmock('./build-ecmascript');
 
 it('copies files and installs node modules', () => {
     const files = ['file1', 'file2'];
@@ -12,6 +11,6 @@ it('copies files and installs node modules', () => {
 
     buildEcmaScript(files, srcDir, buildDir);
 
-    expect(copyFilesModule.copyFiles).toHaveBeenCalledWith(files, srcDir, buildDir);
-    expect(installNodeModulesModule.installNodeModules).toHaveBeenCalledWith(buildDir, ['dev', 'optional', 'peer']);
+    expect(copyFiles).toHaveBeenCalledWith(files, srcDir, buildDir);
+    expect(installNodeModules).toHaveBeenCalledWith(buildDir, ['dev', 'optional', 'peer']);
 });
