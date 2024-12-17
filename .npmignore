@@ -8,9 +8,10 @@ test-results
 .gitignore
 Dockerfile
 Jenkinsfile
-jest.config.js
+jest.config.*
 .fleet
 archive
 .fleet
 .idea
 __mocks__
+__shim__

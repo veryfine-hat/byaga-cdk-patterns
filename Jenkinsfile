@@ -14,7 +14,7 @@ def npmPublish
 pipeline {
   agent { label "agent" }
   environment {
-    NODE_VERSION = "20.13.1"
+    NODE_VERSION = "22.12.1"
     AWS_REGION = "us-east-1"
     SSH_KEY_PATH = '/home/jenkins/.ssh/id_ed25519'
     SOURCE_CONTROL_HOST = 'github.com'
