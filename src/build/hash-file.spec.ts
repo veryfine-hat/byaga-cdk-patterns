@@ -1,9 +1,8 @@
 import {getStoredHash, storeHash} from './hash-file';
-import {writeFileSync} from "fs";
-import {existsSync, readFileSync, ensureDirSync} from 'fs-extra'
+import {existsSync, readFileSync, ensureDirSync, writeFileSync} from 'fs-extra'
 
 jest.unmock('./hash-file')
-jest.mock('fs')
+jest.mock('path')
 jest.mock('./get-source-directory', () => ({
     distributionRoot: '/mock/distribution/root',
     getBuildDirectory: jest.fn()
@@ -52,7 +51,7 @@ describe('storeHash', () => {
 
         storeHash(type, id, hash);
 
-        expect(writeFileSync).toHaveBeenCalledWith('\\mock\\distribution\\root\\hash\\type-id-hash.txt', hash);
+        expect(writeFileSync).toHaveBeenCalledWith('/mock/distribution/root/hash/type-id-hash.txt', hash);
     });
 
     it('calls ensureDir on the folder containing the .txt file', () => {
@@ -62,6 +61,6 @@ describe('storeHash', () => {
 
         storeHash(type, id, hash);
 
-        expect(ensureDirSync).toHaveBeenCalledWith('\\mock\\distribution\\root\\hash');
+        expect(ensureDirSync).toHaveBeenCalledWith('/mock/distribution/root/hash');
     });
 });

@@ -1,6 +1,5 @@
 import {join, dirname} from 'path'
-import {existsSync, readFileSync, ensureDirSync} from "fs-extra";
-import {writeFileSync} from "fs";
+import {existsSync, readFileSync, ensureDirSync, writeFileSync} from "fs-extra";
 import {distributionRoot, getBuildDirectory} from "./get-source-directory";
 
 /**
