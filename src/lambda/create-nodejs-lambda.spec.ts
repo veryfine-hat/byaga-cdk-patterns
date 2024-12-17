@@ -3,7 +3,7 @@ import {buildNodeSource} from '../build';
 import {Code, Runtime} from 'aws-cdk-lib/aws-lambda';
 import duration from '../tools/duration';
 import {createFunction} from "./create-function";
-import {Duration} from "aws-cdk-lib";
+import {Duration} from "aws-cdk-lib/core";
 
 jest.unmock('./create-nodejs-lambda')
 

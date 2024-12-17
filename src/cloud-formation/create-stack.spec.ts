@@ -3,7 +3,7 @@ import {Construct} from "constructs";
 import {Stack} from "aws-cdk-lib/core";
 import {loadConfiguration} from "../load-configuration";
 import {setCurrentStack} from "./current-stack";
-import {MockStack} from "../../__mocks__/aws-cdk-lib/core";
+import { MockStack } from "../../__mocks__/aws-cdk-lib/core";
 
 jest.unmock('./create-stack');
 
@@ -32,7 +32,7 @@ it('creates a new stack with default stage', () => {
         stackName: 'name:stack-stage:stackName',
     }));
     expect(result).toEqual(expect.objectContaining({
-        stack: MockStack,
+        stack: expect.anything(),
         name: props.stackName,
         stage: 'develop',
         project: props.project,
@@ -46,7 +46,7 @@ it('creates a new stack with provided stage', () => {
         stackName: 'name:stack-stage:stackName',
     }));
     expect(result).toEqual(expect.objectContaining({
-        stack: MockStack,
+        stack: expect.anything(),
         name: props.stackName,
         stage: props.stage,
         project: props.project,
@@ -54,6 +54,7 @@ it('creates a new stack with provided stage', () => {
 });
 
 it('will add standard tags to the stack', () => {
+    (Stack as never as jest.Mock).mockImplementation(() => MockStack);
     createStack(scope, props);
 
     expect(MockStack.tags.setTag).toHaveBeenCalledWith('stage', props.stage);

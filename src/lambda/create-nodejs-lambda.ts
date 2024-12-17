@@ -1,7 +1,7 @@
 import {Code, FunctionOptions, Runtime} from "aws-cdk-lib/aws-lambda"
 import {createFunction, FunctionIntegration} from "./create-function";
 import {buildNodeSource} from "../build";
-import {Duration} from "aws-cdk-lib";
+import {Duration} from "aws-cdk-lib/core";
 import duration from "../tools/duration";
 
 /**
@@ -11,7 +11,7 @@ interface NodeFunctionProps {
     /**
      * The properties of the function.
      */
-    funcProps?: FunctionOptions
+    funcProps?: Partial<FunctionOptions>
     /**
      * The timeout duration for the function.
      */

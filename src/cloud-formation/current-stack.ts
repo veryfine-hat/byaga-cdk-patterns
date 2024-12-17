@@ -1,6 +1,6 @@
 import type {DeployStack} from "./DeployStack";
 
-let currentStack: DeployStack<never>;
+let currentStack: DeployStack<object>;
 
 /**
  * Helpful method to get the 'current' stack that is being defined.  Hopefully this will reduce the need to pass the stack around everywhere.
@@ -14,6 +14,6 @@ export function getCurrentStack<T>() {
  * @param stack
  */
 export function setCurrentStack<T>(stack: DeployStack<T>) {
-    currentStack = stack as DeployStack<never>;
+    currentStack = stack as DeployStack<object>;
     return stack;
 }

@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "aws-cdk-lib": ["__shim__/index.ts"],
+      "aws-cdk-lib/aws-lambda": ["__shim__/aws-lambda.ts"],
+      "aws-cdk-lib/*": ["__shim__/*.ts"]
+    }
+  },
+  "include": ["src/**/*.ts", "__shim__/**/*.ts"]
+}

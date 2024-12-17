@@ -1,15 +1,19 @@
-import {Code, FunctionProps, ILayerVersion, Runtime} from 'aws-cdk-lib/aws-lambda';
+import {Code, FunctionProps, Runtime, ILayerVersion} from 'aws-cdk-lib/aws-lambda'
 import {applyHoneycombToLambda} from './apply-honeycomb-to-lambda';
 import {DeployStack, getCurrentStack} from "../cloud-formation";
 import {stringValue} from "../ssm";
+import {Construct} from "constructs";
+import {Stack} from "aws-cdk-lib/core";
 
 let mockStack: DeployStack<object>;
 
 jest.unmock('./apply-honeycomb-to-lambda')
 jest.unmock('./get-layer')
+jest.unmock("aws-cdk-lib/core")
 
 const existingLayer = {} as ILayerVersion;
 const props: FunctionProps = {
+    functionName: 'functionName',
     runtime: Runtime.NODEJS_LATEST,
     handler: 'index.handler',
     code: Code.fromInline('exports.handler = function(event, ctx, cb) { return cb(null, "hi"); }'),
@@ -20,9 +24,11 @@ const props: FunctionProps = {
 
 beforeEach(() => {
     mockStack = {
-        stack: {
-            region: 'us-test-1'
-        }
+        name: 'stackName',
+        stage: 'stage',
+        project: 'project',
+        config: {},
+        stack: new Stack({} as Construct, 'stackName', {stackName: 'string'})
     } as DeployStack<object>
     (getCurrentStack as jest.Mock).mockReturnValue(mockStack);
 });
@@ -30,7 +36,7 @@ beforeEach(() => {
 it('should add honeycomb layer to function props', () => {
     const result = applyHoneycombToLambda(props);
     expect(result.layers).toEqual(expect.arrayContaining([expect.objectContaining({
-        arn: "arn:aws:lambda:us-test-1:702835727665:layer:honeycomb-lambda-extension-x86_64-v11-1-1:1"
+        arn: "arn:aws:lambda:us-shim-1:702835727665:layer:honeycomb-lambda-extension-x86_64-v11-1-1:1"
     })]));
 });
 

@@ -3,7 +3,7 @@ import type {DeployStack} from "./DeployStack";
 import {type StackProps, Stack} from "aws-cdk-lib/core";
 import {genId, genName} from "./generate-identifier";
 import {loadConfiguration} from "../load-configuration";
-import { setCurrentStack } from "./current-stack";
+import {setCurrentStack} from "./current-stack";
 
 /**
  * Interface for the arguments when creating a stack.
@@ -18,11 +18,11 @@ export interface StackArguments extends StackProps {
 
 /**
  * Creates a new stack.
- * @param {IConstruct} scope - The scope in which to define this construct.
- * @param {StackArguments} props - The arguments for creating the stack.
- * @returns {DeployStack} The created stack.
+ * @param scope - The scope in which to define this construct.
+ * @param props - The arguments for creating the stack.
+ * @returns The created stack.
  */
-export function createStack<T extends object>(scope: IConstruct, props: StackArguments): DeployStack<T> {
+export function createStack<Config extends StackArguments>(scope: IConstruct, props: StackArguments): DeployStack<Config> {
     const {stage = 'develop'} = props
     const stack = new Stack(scope, genId(props.stackName, stage), {
         ...props,
@@ -38,6 +38,6 @@ export function createStack<T extends object>(scope: IConstruct, props: StackArg
         name: props.stackName,
         stage,
         project: props.project,
-        config: loadConfiguration<T>(stage)
+        config: loadConfiguration<Config>(stage)
     })
 }

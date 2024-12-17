@@ -1,9 +1,10 @@
-import {Duration, RemovalPolicy} from "aws-cdk-lib";
+import {Duration} from "aws-cdk-lib/core";
 import {Function as Lambda, FunctionProps, Runtime} from "aws-cdk-lib/aws-lambda";
-import {LogGroup, LogRetention, RetentionDays} from "aws-cdk-lib/aws-logs";
+import {LogGroup, RetentionDays} from "aws-cdk-lib/aws-logs";
 import {applyHoneycombToLambda} from "../lambda-layer";
 import {genId, genStackResourceId, genStackResourceName, getCurrentStack, output} from "../cloud-formation";
 import {createLogGroup} from "../cloud-watch";
+import {setLogRetention} from "../cloud-watch/set-log-retention";
 
 type FunctionPropsWithDefaults = Partial<FunctionProps> & Pick<FunctionProps, 'code' | 'handler'>
 /**
@@ -37,6 +38,8 @@ export function createFunction(id: string, options: FunctionIntegrationProps) {
 
     const {stack} = getCurrentStack()
     const logGroup = createLogGroup(id, 'lambda');
+    setLogRetention(logGroup, RetentionDays.ONE_WEEK);
+
     const details: FunctionIntegration = {
         id,
         logGroup,
@@ -48,11 +51,6 @@ export function createFunction(id: string, options: FunctionIntegrationProps) {
 
     output(genId(id, 'function-name'), details.lambda.functionName)
 
-    new LogRetention(stack, genStackResourceId(id, 'log-retention'), {
-        logGroupName: logGroup.logGroupName,
-        retention: RetentionDays.ONE_WEEK,
-        removalPolicy: RemovalPolicy.DESTROY
-    });
 
     return details
 }
