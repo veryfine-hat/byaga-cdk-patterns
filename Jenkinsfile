@@ -39,12 +39,7 @@ pipeline {
       }
     }
     stage("npm") { steps { sh 'install-tool npm' } }
-    stage("dependencies") {
-      steps {
-        sh 'npm install'
-        dir('deploy') { sh 'npm install'}
-      }
-    }
+    stage("dependencies") { steps { sh 'npm install' } }
     stage("build") {
       environment { NODE_ENV = "production" }
       steps { sh 'npm run build' }
@@ -71,7 +66,7 @@ pipeline {
         beforeInput true
         branch PRODUCTION_BRANCH
       }
-      steps { lock(resource: "${env.BRANCH_NAME}-production") { script { npmPublish() } } }
+      steps { lock(resource: "cdk-patterns-production") { script { npmPublish() } } }
     }
   }
 }
