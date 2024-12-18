@@ -31,10 +31,7 @@ pipeline {
       when { not { branch PRODUCTION_BRANCH } }
       steps {
         configFileProvider([configFile(fileId: 'd53821ca-5194-4b4b-a30a-385f33d03cff', variable: 'GIT_SIGN')]) {
-          script {
-            gitSign = load "$GIT_SIGN"
-            gitSign()
-          }
+          script { load("$GIT_SIGN")() }
         }
       }
     }
@@ -42,9 +39,7 @@ pipeline {
       when { not { branch PRODUCTION_BRANCH } }
       steps {
         configFileProvider([configFile(fileId: '661d583f-966d-484b-ba97-ea35d28343e8', variable: 'NPM_VERSION')]) {
-          script {
-            load("$NPM_VERSION")()
-          }
+          script { load("$NPM_VERSION")() }
         }
       }
     }
@@ -53,10 +48,7 @@ pipeline {
       environment { TARGET_BRANCH = "${PRODUCTION_BRANCH}" }
       steps {
         configFileProvider([configFile(fileId: 'c7102ede-65a2-40a2-89b9-0018f71425ae', variable: 'GIT_PUSH')]) {
-          script {
-            gitPush = load "$GIT_PUSH"
-            gitPush(PRODUCTION_BRANCH)
-          }
+          script { load("$GIT_PUSH")(PRODUCTION_BRANCH) }
         }
       }
     }
@@ -70,10 +62,7 @@ pipeline {
       steps {
         lock(resource: "cdk-patterns-production") {
           configFileProvider([ configFile(fileId: '2a833442-7210-4bb2-99eb-a0694dc119b6', variable: 'NPM_PUBLISH')]) {
-            script {
-              npmPublish = load "$NPM_PUBLISH"
-              npmPublish()
-            }
+            script { load("$NPM_PUBLISH")() }
           }
         }
       }
