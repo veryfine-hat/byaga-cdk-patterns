@@ -11,6 +11,7 @@ def gitSign
 def npmVersion
 def npmPublish
 
+
 pipeline {
   agent { label "agent" }
   environment {
