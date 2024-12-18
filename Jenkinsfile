@@ -36,6 +36,7 @@ pipeline {
             gitSign()
           }
         }
+      }
     }
     stage("version") {
       when { not { branch PRODUCTION_BRANCH } }
