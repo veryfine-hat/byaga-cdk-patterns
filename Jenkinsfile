@@ -43,8 +43,7 @@ pipeline {
       steps {
         configFileProvider([configFile(fileId: '661d583f-966d-484b-ba97-ea35d28343e8', variable: 'NPM_VERSION')]) {
           script {
-            npmVersion = load "$NPM_VERSION"
-            npmVersion()
+            load("$NPM_VERSION")()
           }
         }
       }
