@@ -51,14 +51,14 @@ pipeline {
     }
     stage("test") { steps { sh 'npm run test' } }
     stage("lint") { steps { sh 'npm run lint' } }
-//     stage("sign") {
-//       when { not { branch PRODUCTION_BRANCH } }
-//       steps { script { gitSign() } }
-//     }
-//     stage("version") {
-//       when { not { branch PRODUCTION_BRANCH } }
-//       steps { script { npmVersion() } }
-//     }
+    stage("sign") {
+      when { not { branch PRODUCTION_BRANCH } }
+      steps { script { gitSign() } }
+    }
+    stage("version") {
+      when { not { branch PRODUCTION_BRANCH } }
+      steps { script { npmVersion() } }
+    }
 //     stage("release") {
 //       when { not { branch PRODUCTION_BRANCH } }
 //       environment { TARGET_BRANCH = "${PRODUCTION_BRANCH}" }
