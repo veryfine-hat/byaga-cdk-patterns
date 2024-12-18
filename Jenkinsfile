@@ -59,11 +59,11 @@ pipeline {
       when { not { branch PRODUCTION_BRANCH } }
       steps { script { npmVersion() } }
     }
-//     stage("release") {
-//       when { not { branch PRODUCTION_BRANCH } }
-//       environment { TARGET_BRANCH = "${PRODUCTION_BRANCH}" }
-//       steps { script { gitPush(PRODUCTION_BRANCH) } }
-//     }
+    stage("release") {
+      when { not { branch PRODUCTION_BRANCH } }
+      environment { TARGET_BRANCH = "${PRODUCTION_BRANCH}" }
+      steps { script { gitPush(PRODUCTION_BRANCH) } }
+    }
     stage("publish") {
       options { timeout time: 1, unit: 'DAYS' }
       environment { NODE_ENV = 'production' }
