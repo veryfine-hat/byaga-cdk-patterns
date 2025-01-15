@@ -32,7 +32,10 @@ export function staticWebSite(id: string, props: StaticWebSiteConfig) {
     spawnSync('npm i', {cwd})
 
     console.log('Building UI Source', id)
-    spawnSync('npm run export', {cwd})
+    spawnSync('npm run export', {
+        cwd,
+        env: { ...props.env }
+    })
 
     console.log('Total Build Duration (ms)', done())
 
