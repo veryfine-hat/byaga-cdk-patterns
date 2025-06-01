@@ -1,6 +1,6 @@
 {
   "name": "@byaga/cdk-patterns",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "Collection of common patterns used when making AWS CloudFormation templates using CDK",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
